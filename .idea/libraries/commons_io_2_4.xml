@@ -1,0 +1,14 @@
+<component name="libraryTable">
+  <library name="commons-io-2.4">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/Downloads/libs_coletor/commons-io-2.4.jar!/" />
+      <root url="jar://$USER_HOME$/Downloads/libs_coletor/htmlcleaner-2.16.jar!/" />
+      <root url="jar://$USER_HOME$/Downloads/libs_coletor/juniversalchardet-1.0.3.jar!/" />
+      <root url="jar://$USER_HOME$/Downloads/libs_coletor/log4j-1.2.14.jar!/" />
+      <root url="jar://$USER_HOME$/Downloads/libs_coletor/ocutil-2.4.2.jar!/" />
+      <root url="jar://$USER_HOME$/Downloads/PTStemmer-2.0-Java/PTStemmer-2.0-Java/PTStemmer_v2.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
