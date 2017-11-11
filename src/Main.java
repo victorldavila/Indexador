@@ -14,7 +14,7 @@ public class Main {
         wikiIndex.startIndex();
         long usedMemAfter = usedMem();
 
-        wikiIndex.gravaIndice(new File("C:/Users/victo/IdeaProjects/Indexador/index.obj"));
+        wikiIndex.gravaIndice(new File("C:/Users/victo/IdeaProjects/Indexador/index.txt"));
 
         System.out.println("Indice gravado em: "+ (System.currentTimeMillis() - time) / (1000.0 * 60));
         System.out.println("Memoria usada: " + (usedMemAfter - usedMemBefore) / (1024.0 * 1024.0));

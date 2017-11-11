@@ -29,6 +29,8 @@ public class IndiceLight extends Indice implements Serializable {
 	 * id incremental dos termos.
 	 */
 	private int lastTermId = 0;
+
+	private int lastCurrentIdx = 0;
 	
 	public IndiceLight(int initCap) {
 		arrDocId = new int[initCap];
@@ -70,12 +72,12 @@ public class IndiceLight extends Indice implements Serializable {
 	 */
 	@Override
 	public void index(String termo,int docId,int freqTermo) {
-		int idTermo = 0;
+		int idTermo;
 
 		if (lastIdx == arrDocId.length){
-			aumentaCapacidadeVetor(arrDocId, 0.1);
-			aumentaCapacidadeVetor(arrTermId, 0.1);
-			aumentaCapacidadeVetor(arrFreqTermo, 0.1);
+			arrDocId = aumentaCapacidadeVetor(arrDocId, 0.1);
+			arrTermId = aumentaCapacidadeVetor(arrTermId, 0.1);
+			arrFreqTermo = aumentaCapacidadeVetor(arrFreqTermo, 0.1);
 		}
 
 		if(posicaoIndice.containsKey(termo)){
@@ -98,6 +100,8 @@ public class IndiceLight extends Indice implements Serializable {
 			
 			lastTermId++;
 		}
+
+		++lastIdx;
 	}
 
 	
@@ -141,7 +145,7 @@ public class IndiceLight extends Indice implements Serializable {
 		PosicaoVetor posicaoVetor = posicaoIndice.get(termo);
 		
 		int termId = posicaoVetor.getIdTermo();
-		
+
 		for (int i = posicaoVetor.getPosInicial(); arrTermId[i] == termId; i++) {
 			Ocorrencia ocorrencia = new Ocorrencia(arrDocId[i], arrFreqTermo[i]);
 			
@@ -168,20 +172,20 @@ public class IndiceLight extends Indice implements Serializable {
 	public void concluiIndexacao() {
 		ordenaIndice();
 		
-		int idTermo = 0, lastIndex = 0;
+		int idTermo, lastIndex = 0;
 
 		for(Map.Entry<String, PosicaoVetor> entry : posicaoIndice.entrySet()) {
 			PosicaoVetor posicaoVetor = entry.getValue();
 			
 			idTermo = posicaoVetor.getIdTermo();
 			
-			posicaoVetor.setPosInicial(lastIndex);
-			
 			int initIndex = lastIndex;
+
+			posicaoVetor.setPosInicial(initIndex);
 			
 			for (; idTermo == arrTermId[lastIndex]; lastIndex++) { }
 			
-			entry.getValue().setNumDocumentos(lastIndex - initIndex);
+			posicaoIndice.get(entry.getKey()).setNumDocumentos(lastIndex - initIndex);
 		}
 	}
 

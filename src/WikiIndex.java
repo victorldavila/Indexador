@@ -1,13 +1,21 @@
 import indice.estrutura.Indice;
 import indice.estrutura.IndiceLight;
+import indice.estrutura.Ocorrencia;
 import org.clapper.util.html.HTMLUtil;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Entities;
+import org.jsoup.safety.Cleaner;
+import org.jsoup.safety.Whitelist;
 import ptstemmer.Stemmer;
 import ptstemmer.exceptions.PTStemmerException;
 import ptstemmer.implementations.OrengoStemmer;
 
 import java.io.*;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class WikiIndex {
     private File dirWikiSample;
@@ -27,7 +35,7 @@ public class WikiIndex {
         for(File dirWiki : dirWikiSample.listFiles()) {
             if(dirWiki.isDirectory()) {
                 for(File arqWiki : dirWiki.listFiles()) {
-                    System.out.println("Indexando artigo numero: " + numeroIndex + " " + arqWiki.getAbsolutePath());
+                    //System.out.println("Indexando artigo numero: " + numeroIndex + " " + arqWiki.getAbsolutePath());
 
                     String txtLimpo = readFile(arqWiki);
 
@@ -84,14 +92,26 @@ public class WikiIndex {
 
     private String readFile(File arqWiki) throws IOException {
         String txtFile = ArquivoUtil.leTexto(arqWiki);
-        txtFile = HTMLUtil.textFromHTML(txtFile);
+        Document docText = Jsoup.parse(txtFile);
+        // Get back the string of the body.
+        txtFile = docText.body().text();
         return cleanFile(txtFile);
     }
 
     public void gravaIndice(File f) throws IOException {
-        ObjectOutputStream arqOutput = new ObjectOutputStream(	new FileOutputStream(f));
+        BufferedWriter bufferedWriter = new BufferedWriter(	new FileWriter(f));
 
-        arqOutput.writeObject(indiceLight);
-        arqOutput.close();
+        Set<String> termos = indiceLight.getListTermos();
+
+        for (String termo : indiceLight.getListTermos()) {
+            for (Ocorrencia oc : indiceLight.getListOccur(termo)) {
+                String line = termo + ": <" + String.valueOf(oc.getDocId()) + ", " + String.valueOf(oc.getFreq()) + ">";
+                bufferedWriter.write(line);
+                bufferedWriter.newLine();
+            }
+        }
+
+        //arqOutput.writeObject(indiceLight);
+        bufferedWriter.close();
     }
 }
