@@ -99,19 +99,22 @@ public class WikiIndex {
     }
 
     public void gravaIndice(File f) throws IOException {
-        BufferedWriter bufferedWriter = new BufferedWriter(	new FileWriter(f));
+        ObjectOutputStream arqOutput = new ObjectOutputStream(	new FileOutputStream(f));
+        //BufferedWriter bufferedWriter = new BufferedWriter(	new FileWriter(f));
+        arqOutput.writeObject(indiceLight);
+        //Set<String> termos = indiceLight.getListTermos();
 
-        Set<String> termos = indiceLight.getListTermos();
-
-        for (String termo : indiceLight.getListTermos()) {
+        /*for (String termo : indiceLight.getListTermos()) {
             for (Ocorrencia oc : indiceLight.getListOccur(termo)) {
                 String line = termo + ": <" + String.valueOf(oc.getDocId()) + ", " + String.valueOf(oc.getFreq()) + ">";
+                //System.out.println(line);
                 bufferedWriter.write(line);
                 bufferedWriter.newLine();
             }
-        }
+        }*/
 
-        //arqOutput.writeObject(indiceLight);
-        bufferedWriter.close();
+        arqOutput.writeObject(indiceLight);
+        //bufferedWriter.close();
+        arqOutput.close();
     }
 }
